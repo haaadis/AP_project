@@ -95,7 +95,7 @@ class Order:
                 f = open("factor.txt", "w+")
                 f.writelines([f"{self.cart_item.fillna('')} \n","*******\n",
                                  f"{self.order_no} \n",
-                                 f"address : {c.address.values}{c.postcode} \n",
+                                 f"address: {' '.join(map(str, self.address.values()))}{c.postcode} \n",
                                  df.iloc[-1].to_string(index=False)])
                 f.close()
                 h = Hesabdari()
