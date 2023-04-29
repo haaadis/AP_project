@@ -1,19 +1,22 @@
 import pandas as pd
-from anbar import items
+import importlib
 import random
-
-
-
-
-
-
-
+import os
+from openpyxl import Workbook , load_workbook
+if (os.path.exists("infofile.xlsx") == False):   #creates infofile if doesn't exist
+    w=Workbook()
+    file=w.active
+    file.append(['name','how','time'])
+    file.freeze_panes = 'A2'
+    w.save('infofile.xlsx')
+else:
+    pass
 class infooo:
     def __init__(self):
         self.address = {'shahrestan':int(input('sharestan(1 for teh):')),'shahr':input('shahr:'),'joz':input('')} 
         while True:
               self.postcode=input('')
-              if not self.postcode.isdigit(): # check if a string contains a number with .isdigit()
+              if not self.postcode.isdigit():    # check if a string contains a number with .isdigit()
                   print ("Enter only numbers\n")
                   continue
               elif len(self.postcode) != 10:
@@ -24,23 +27,19 @@ class infooo:
 
         self.phone = input('phone:')
         self.name = input('name:')
-        self.time = int(input('time:'))  
-
-        self.info = pd.DataFrame({'name':self.name , 'address':self.address ,'':self.postcode,
-                                  'how':('post' if self.address['shahrestan']==1 else 'peyk'),
-                                  'time':self.time },
-                                  index=[0])
-
-
-
+        self.time = int(input('time:'))       
+        self.new = [self.name,('post' if self.address['shahrestan']==1 else 'peyk'),self.time]       
+        w=load_workbook('infofile.xlsx')
+        file=w.active
+        file.append(self.new)
+        w.save('infofile.xlsx')
+        self.when_send()
 
 
 
-
-
-
-
-
+        
+        
+        
 class Order:
     def __init__(self):
         self.cart_item = pd.DataFrame()
@@ -51,52 +50,51 @@ class Order:
             elif (quantity > called_item['stock']).any() or called_item['stock']=='unavailable':
                 return False
     def add_to_cart(self):
-            df = items
             while True:
+                df = (importlib.import_module(input('bags or shoes:').capitalize())).items       #choose bag or shoe
                 print(df.to_string(index=False))
                 id = int(input('select the id of what u want:'))
                 quantity = int(input('how many?: '))
-                print(df.loc[df['id']==id,'color'])   
+                print(df.loc[df['id']==id,'color'].to_string(index=False))             #print colors to choose from       
                 color = input('which color?: ')
-                if self.check_quantity(id,quantity,color):     #check the quantity using the function     
+                if self.check_quantity(id,quantity,color):   #check the quantity using the function       
                       called_item = df.loc[(df['id'] == id) & (df['color'] == color),['id','name','color','unit price']]
                       called_item['quantity'] = quantity         #add quantity column
                       called_item['total price'] = called_item['quantity']*called_item['unit price']         #add total price column
                       self.cart_item = self.cart_item._append(called_item)    #add to cart
-
                       checkout = input ('checkout?: ').capitalize()     #checkout or continue to order
                       if checkout == 'Yes':
                           self.cart_item.loc['total'] = self.cart_item.loc[:,['quantity','total price']].sum(numeric_only=True)  #add total row
                           print(self.checkout())                          
-
+                          
                           break;
                       continue;
                 else:
                       print('insufficient inventory')
                       continue;
-
     def checkout(self):
         c = infooo()   #use infooo class to get information
         #enter a port
-
+        
         self.order_no = random.randint(10**10,10**11)
         self.card_no = (input('enter your card number: '))   
         def confirm(self):
             if len(self.card_no)==16:
                 return True                                        
             else:
-                return False  
-                     
-        if c.confirm():
+                return False           
+
+        if confirm(self):
                 #save confirmation as txt file
                 f = open("conf.txt", "w+")
                 f.writelines(["payment status :successful \n",f"name : {c.name} \n",f"card.no:{self.card_no} \n"])
                 f.close() 
                 #save factor as txt file
                 f = open("factor.txt", "w+")
-                f.writelines([f"{self.cart_item} \n","*******\n",f'{c.info}\n'])
+                f.writelines([f"{self.cart_item.fillna('')} \n","*******\n",f'{c.info}\n'])
                 f.close()
-
+                h = Hesabdari()
+                h.hh()
                 return open("conf.txt","r+").read() + open("factor.txt","r+").read()
         else:
                 #save confirmation as txt file
