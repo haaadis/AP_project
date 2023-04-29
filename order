@@ -58,15 +58,15 @@ class Order:
                 quantity = int(input('how many?: '))
                 print(df.loc[df['id']==id,'color'])   
                 color = input('which color?: ')
-                if self.check_quantity(id,quantity,color):          
+                if self.check_quantity(id,quantity,color):     #check the quantity using the function     
                       called_item = df.loc[(df['id'] == id) & (df['color'] == color),['id','name','color','unit price']]
-                      called_item['quantity'] = quantity
-                      called_item['total price'] = called_item['quantity']*called_item['unit price']
-                      self.cart_item = self.cart_item._append(called_item)
+                      called_item['quantity'] = quantity         #add quantity column
+                      called_item['total price'] = called_item['quantity']*called_item['unit price']         #add total price column
+                      self.cart_item = self.cart_item._append(called_item)    #add to cart
 
-                      checkout = input ('checkout?: ').capitalize()
+                      checkout = input ('checkout?: ').capitalize()     #checkout or continue to order
                       if checkout == 'Yes':
-
+                          self.cart_item.loc['total'] = self.cart_item.loc[:,['quantity','total price']].sum(numeric_only=True)  #add total row
                           print(self.checkout())                          
 
                           break;
@@ -76,7 +76,7 @@ class Order:
                       continue;
 
     def checkout(self):
-        c = infooo()   
+        c = infooo()   #use infooo class to get information
         #enter a port
 
         self.order_no = random.randint(10**10,10**11)
@@ -85,4 +85,4 @@ class Order:
             if len(self.card_no)==16:
                 return True                                        
             else:
-                return False    
+                return False  
