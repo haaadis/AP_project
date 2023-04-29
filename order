@@ -34,11 +34,11 @@ class infooo:
         file.append(self.new)
         w.save('infofile.xlsx')
         self.when_send()
+    def when_send(self):     
+         info = pd.read_excel("infofile.xlsx") 
 
 
-
-        
-        
+          
         
 class Order:
     def __init__(self):
@@ -51,7 +51,8 @@ class Order:
                 return False
     def add_to_cart(self):
             while True:
-                df = (importlib.import_module(input('bags or shoes:').capitalize())).items       #choose bag or shoe
+                m = input('bags or shoes:').capitalize()       #choose bag or shoe
+                df = pd.read_csv(m+'.csv')
                 print(df.to_string(index=False))
                 id = int(input('select the id of what u want:'))
                 quantity = int(input('how many?: '))
@@ -90,8 +91,12 @@ class Order:
                 f.writelines(["payment status :successful \n",f"name : {c.name} \n",f"card.no:{self.card_no} \n"])
                 f.close() 
                 #save factor as txt file
+                df = pd.read_excel("infofile.xlsx")
                 f = open("factor.txt", "w+")
-                f.writelines([f"{self.cart_item.fillna('')} \n","*******\n",f'{c.info}\n'])
+                f.writelines([f"{self.cart_item.fillna('')} \n","*******\n",
+                                 f"{self.order_no} \n",
+                                 f"address : {c.address.values}{c.postcode} \n",
+                                 df.iloc[-1].to_string(index=False)])
                 f.close()
                 h = Hesabdari()
                 h.hh()
