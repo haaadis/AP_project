@@ -86,3 +86,21 @@ class Order:
                 return True                                        
             else:
                 return False  
+                     
+        if c.confirm():
+                #save confirmation as txt file
+                f = open("conf.txt", "w+")
+                f.writelines(["payment status :successful \n",f"name : {c.name} \n",f"card.no:{self.card_no} \n"])
+                f.close() 
+                #save factor as txt file
+                f = open("factor.txt", "w+")
+                f.writelines([f"{self.cart_item} \n","*******\n",f'{c.info}\n'])
+                f.close()
+
+                return open("conf.txt","r+").read() + open("factor.txt","r+").read()
+        else:
+                #save confirmation as txt file
+                f = open("conf.txt", "w+")
+                f.writelines(["payment status :unsuccessful \n",f"name : {c.name} \n",f"card.no:{self.card_no} \n"])
+                f.close()   
+                return open("conf.txt","r+").read() 
