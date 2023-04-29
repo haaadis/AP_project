@@ -1,0 +1,88 @@
+import pandas as pd
+from anbar import items
+import random
+
+
+
+
+
+
+
+class infooo:
+    def __init__(self):
+        self.address = {'shahrestan':int(input('sharestan(1 for teh):')),'shahr':input('shahr:'),'joz':input('')} 
+        while True:
+              self.postcode=input('')
+              if not self.postcode.isdigit(): # check if a string contains a number with .isdigit()
+                  print ("Enter only numbers\n")
+                  continue
+              elif len(self.postcode) != 10:
+                  print ("Enter 10 digits\n")
+                  continue
+              else: 
+                  break
+
+        self.phone = input('phone:')
+        self.name = input('name:')
+        self.time = int(input('time:'))  
+
+        self.info = pd.DataFrame({'name':self.name , 'address':self.address ,'':self.postcode,
+                                  'how':('post' if self.address['shahrestan']==1 else 'peyk'),
+                                  'time':self.time },
+                                  index=[0])
+
+
+
+
+
+
+
+
+
+
+
+class Order:
+    def __init__(self):
+        self.cart_item = pd.DataFrame()
+    def check_quantity(self,id,quantity,color): 
+            called_item = items.loc[(items['id'] == id) & (items['color'] == color)]
+            if (quantity <= called_item['stock']).any():
+                return True
+            elif (quantity > called_item['stock']).any() or called_item['stock']=='unavailable':
+                return False
+    def add_to_cart(self):
+            df = items
+            while True:
+                print(df.to_string(index=False))
+                id = int(input('select the id of what u want:'))
+                quantity = int(input('how many?: '))
+                print(df.loc[df['id']==id,'color'])   
+                color = input('which color?: ')
+                if self.check_quantity(id,quantity,color):          
+                      called_item = df.loc[(df['id'] == id) & (df['color'] == color),['id','name','color','unit price']]
+                      called_item['quantity'] = quantity
+                      called_item['total price'] = called_item['quantity']*called_item['unit price']
+                      self.cart_item = self.cart_item._append(called_item)
+
+                      checkout = input ('checkout?: ').capitalize()
+                      if checkout == 'Yes':
+
+                          print(self.checkout())                          
+
+                          break;
+                      continue;
+                else:
+                      print('insufficient inventory')
+                      continue;
+
+    def checkout(self):
+        c = infooo()   
+        #enter a port
+
+        self.order_no = random.randint(10**10,10**11)
+        self.card_no = (input('enter your card number: '))   
+        def confirm(self):
+            if len(self.card_no)==16:
+                return True                                        
+            else:
+                return False    
