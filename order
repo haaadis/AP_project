@@ -25,7 +25,7 @@ class infooo:
                               'details':input('enter details like house number:\n'),
                               'postcode':'postcode:'+input('enter post code:\n')} 
               
-              self.postcode=self.address['postcode']
+              self.postcode=self.address['postcode'][9:]
               if not self.postcode.isdigit():    # check if a string contains a number with .isdigit()
                   print ("*error: Enter only numbers for post code*\n")
                   continue
