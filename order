@@ -13,14 +13,24 @@ else:
     pass
 class infooo:
     def __init__(self):
-        self.address = {'shahrestan':int(input('sharestan(1 for teh):')),'shahr':input('shahr:'),'joz':input('')} 
+        d={'1:Tehran':['1:Shahryar','2:Eslamshahr'],'2:Isfahan':['1:Miandasht','2:Chadegan'],'3:Tabriz':['1:Maraghe','2:Tabriz']}  #list of available places to send   
         while True:
-              self.postcode=input('')
+              print(" , ".join(map(str, d.keys())))       #print shahrestan
+              shahrestan = input('choose code of shahrestan: ')
+              a=[idx for idx in list(d.keys()) if idx[0] == shahrestan][0]    #key of choosen shahrestan in d dictionary
+              print(f"{d[a]}\n")                         #print cities of choosen shahrestan
+              city = input('choose code of city:')             
+              self.address = {'shahrestan':a[2:],
+                              'city': [idx[2:] for idx in  d[a] if idx[0] == str(city)][0],
+                              'details':input('enter details like house number:\n'),
+                              'postcode':'postcode:'+input('enter post code:\n')} 
+              
+              self.postcode=self.address['postcode']
               if not self.postcode.isdigit():    # check if a string contains a number with .isdigit()
-                  print ("Enter only numbers\n")
+                  print ("*error: Enter only numbers for post code*\n")
                   continue
-              elif len(self.postcode) != 10:
-                  print ("Enter 10 digits\n")
+              elif len(self.postcode) != 10:      #check if postcode has 16 digits
+                  print ("*error: Enter 10 digits for post code*\n")
                   continue
               else: 
                   break
@@ -28,7 +38,7 @@ class infooo:
         self.phone = input('phone:')
         self.name = input('name:')
         self.time = int(input('time:'))       
-        self.new = [self.name,('post' if self.address['shahrestan']==1 else 'peyk'),self.time]       
+        self.new = [self.name,('peyk' if shahrestan=='1' else 'post'),self.time]       
         w=load_workbook('infofile.xlsx')
         file=w.active
         file.append(self.new)
@@ -92,11 +102,12 @@ class Order:
                 f.close() 
                 #save factor as txt file
                 df = pd.read_excel("infofile.xlsx")
+                df1 = df.tail(1).stack().reset_index(level=0, drop=True).rename_axis('a').reset_index(name='b')    #makes columns vertical
                 f = open("factor.txt", "w+")
                 f.writelines([f"{self.cart_item.fillna('')} \n","*******\n",
-                                 f"{self.order_no} \n",
-                                 f"address: {' '.join(map(str, c.address.values()))}{c.postcode} \n",
-                                 df.iloc[-1].to_string(index=False)])
+                f"order number : {self.order_no} \n",
+                f"address : {' '.join(map(str, c.address))} \n",
+                               '\n'.join(['{} : {}'.format(a,b) for a, b in df1.to_numpy()])])   #print values with columns names(column : value)
                 f.close()
                 h = Hesabdari()
                 h.hh()
