@@ -44,7 +44,8 @@ class infooo:
         file.append(self.new)
         w.save('infofile.xlsx')
         self.when_send()
-    def when_send(self):     
+    def when_send(self):  
+         info = pd.read_excel("infofile.xlsx")
          if info['time'].iloc[-1] in range(12,15):  
             if info.loc[info['how']==info['how'].iloc[-1]][info.time == 'noon'].shape[0]<3:
                info["time"].iloc[-1] = 'noon'
