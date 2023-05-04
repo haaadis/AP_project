@@ -45,13 +45,13 @@ class infooo:
         w.save('infofile.xlsx')
         self.when_send()
     def when_send(self):     
-        if info['time'].iloc[-1] in range(12,15):  
-            if info[info.time == 'noon'].shape[0]<3:
+         if info['time'].iloc[-1] in range(12,15):  
+            if info.loc[info['how']==info['how'].iloc[-1]][info.time == 'noon'].shape[0]<3:
                info["time"].iloc[-1] = 'noon'
             else:
                info['time'].iloc[-1]='morning'
          elif info['time'].iloc[-1] in range(15,18):  
-           if info[info.time == 'evening'].shape[0]<3:
+           if info.loc[info['how']==info['how'].iloc[-1]][info.time == 'evening'].shape[0]<3:
                info["time"].iloc[-1] = 'eveing'            
            else:  
                info['time'].iloc[-1]='morning'      
