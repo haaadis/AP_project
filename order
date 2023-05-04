@@ -45,7 +45,21 @@ class infooo:
         w.save('infofile.xlsx')
         self.when_send()
     def when_send(self):     
-         info = pd.read_excel("infofile.xlsx") 
+      if info.loc[-1]['time'] in range(12,15):  
+         if info[info.time == 'noon'].shape[0]<3:
+            info.loc[-1]["time"] = 'noon'
+         else:
+            info.loc[-1]['time']='morning'
+      elif info.loc[-1][-1]['time'] in range(15,18):  
+         if info[info.time == 'evening'].shape[0]<3:
+            info.loc[-1]["time"] = 'eveing'            
+         else:  
+            info.loc[-1]['time']='morning'      
+      else:
+          info.loc[-1]['time']='morning'
+      info.to_excel('infofile.xlsx',index=False)
+
+
 
 
           
