@@ -9,7 +9,7 @@ class Accounting:
     else:
         pass
 
-    def hh(self,a,b,c):    
+    def acountant(self,a,b,c):    
           wb=load_workbook('accounting.xlsx')
           ws = wb.active
           p=[b,a.loc['total','quantity'],
