@@ -5,12 +5,12 @@ class Accounting:
       file=w.active
       file.append(['order','quantity','total price','send cost','tax'])
       file.freeze_panes = 'A2'
-      w.save('accounting.xlsx')
+      w.save('accounting.csv')
     else:
         pass
 
     def acountant(self,a,b,c):    
-          wb=load_workbook('accounting.xlsx')
+          wb=pd.read_csv('accounting.xlsx')
           ws = wb.active
           p=[b,a.loc['total','quantity'],
                     a.loc['total','total price'],
