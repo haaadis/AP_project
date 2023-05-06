@@ -69,11 +69,13 @@ class Order:
     def __init__(self):
         self.cart_item = pd.DataFrame()
     def check_quantity(self,items,id,quantity,color): 
-            called_item = items.loc[(items['id'] == id) & (items['color'] == color)]
-            if (quantity <= called_item['stock']).any():
-                return True
-            elif (quantity > called_item['stock']).any() or called_item['stock']=='unavailable':
+            called_item = items.loc[(items['id'] == id) & (items['color'] == color)] 
+            if called_item.iloc[0]['stock']=='unavailable':
                 return False
+            elif (quantity > int(called_item.iloc[0]['stock'])) :
+                return False
+            else:
+                 return True
     def add_to_cart(self):
             while True:
                 m = input('bags or shoes:').capitalize()       #choose bag or shoe
@@ -139,3 +141,4 @@ class Order:
                 f.close()   
                 return open("conf.txt","r+").read() 
  
+Order().add_to_cart() 
