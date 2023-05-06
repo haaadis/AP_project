@@ -62,3 +62,8 @@ class Inventory:
         x=wh['stock'].replace(0, 'unavailable')
         wh.update(x)
         wh.to_csv(warehouse+'.csv',index = False)
+        
+    def check_inventory(self):
+        warehouse = input('bags or shoes: ').capitalize() #choose
+        return pd.read_csv(warehouse+'.csv')
+        
