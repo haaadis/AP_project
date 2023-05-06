@@ -88,6 +88,8 @@ class Order:
                       called_item['quantity'] = quantity         #add quantity column
                       called_item['total price'] = called_item['quantity']*called_item['unit price']         #add total price column
                       self.cart_item = self.cart_item._append(called_item)    #add to cart
+                      from anbardari import Inventory
+                      Inventory.update(self,m,id,quantity,color)                          
                       checkout = input ('checkout?: ').capitalize()     #checkout or continue to order
                       if checkout == 'Yes':
                           self.cart_item.loc['total'] = self.cart_item.loc[:,['quantity','total price']].sum(numeric_only=True)  #add total row
@@ -124,11 +126,11 @@ class Order:
                 f = open("factor.txt", "w+")
                 f.writelines([f"{self.cart_item.fillna('')} \n","*******\n",
                 f"order number : {self.order_no} \n",
-                f"address : {' '.join(map(str, c.address))} \n",
+                f"address : {' '.join(map(str, c.address.values()))} \n",
                                '\n'.join(['{} : {}'.format(a,b) for a, b in df1.to_numpy()])])   #print values with columns names(column : value)
                 f.close()
-                h = Acountong()
-                h.acountant()
+                from acc import Accounting
+                Accounting.acountant(self,self.cart_item,self.order_no,c.new[1])
                 return open("conf.txt","r+").read() + open("factor.txt","r+").read()
         else:
                 #save confirmation as txt file
