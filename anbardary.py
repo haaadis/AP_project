@@ -4,37 +4,42 @@ class Inventory:
     
     def stock_manual(self):
         while True:
-            m = input('bags or shoes: ').capitalize() #choose
-            df = pd.read_csv(m+'.csv')
+            warehouse = input('bags or shoes: ').capitalize() #choose
+            df = pd.read_csv(warehouse+'.csv')
             id = int(input('Enter stock ID: '))
+            print(df.loc[df['id']==id,'color'].to_string(index=False))   #print colors to choose from     
+            color = input('which color?: ')
             new_stock = int(input('Enter new stock count: '))
-            df.loc[df['id'] == id, 'stock'] = new_stock        
-            t=input('do you wanna continue')
+            df.loc[(df['id'] == id)&(df['color']==color), 'stock'] = new_stock
+                   
+            t=input('do you wanna continue: ')
             if t=='yes':
                 continue
             else:
-                df.to_csv('my_file.csv',index=False)
+                df.to_csv(warehouse+'.csv',index=False)
                 break
     def stock_csv(self):
        while True:
-            m = input('bags or shoes: ').capitalize() #choose
-            df = pd.read_csv(m+'.csv')
-            file=input()
+            warehouse = input('bags or shoes: ').capitalize() #choose
+            df = pd.read_csv(warehouse+'.csv')
+
+            file=input(('enter the csv file path: '))
             file=pd.read_csv(file)
             df.set_index('id', inplace=True)
             df.update(file.set_index('id'))
             df.reset_index()
-            t=input('do you wanna continue')
+            t=input('do you wanna continue: ')
             if t=='yes':
                 continue
             else:
-                df.to_csv('my_file.csv',index=False)
+                df.to_csv(warehouse+'.csv',index=False)
                 break
+    
         
     def add_item(self):
         while True:
-                m = input('bags or shoes: ').capitalize() #choose
-                df = pd.read_csv(m+'.csv')
+                warehouse = input('bags or shoes: ').capitalize() #choose
+                df = pd.read_csv(warehouse+'.csv')
                 kala_w=input('enter w')
                 kala_id=input('enter the id you wanna add')
                 kala_name=input('enter the name ')
@@ -43,16 +48,16 @@ class Inventory:
                 kala_stock=input('enter ths stock')
                 
                 df.loc[len(df.index)]=[kala_id,kala_name,kala_price,kala_stock,kala_color,kala_w]
-                t=input('do you wanna continue')
+                t=input('do you wanna continue: ')
                 if t=='yes':
                     continue
                 
                 else:
-                    df.to_csv('my_file.csv',index=False)
+                    df.to_csv(warehouse+'.csv',index=False)
                     break
-    def update(self,m,id,quantity,color):
-        wh = m.items
+    def update(self,warehouse,id,quantity,color):
+        wh = warehouse.items
         res = wh.loc[(wh['id'] == id) & (wh['color'] == color), 'stock'].iloc[0]
         wh.loc[(wh['id'] == id) & (wh['color'] == color), 'stock'] = res-quantity
-        m = m.replace(0, 'unavailable')
-        wh.to_csv(m.__name__+'.csv',index = False)
+        warehouse = warehouse.replace(0, 'unavailable')
+        wh.to_csv(warehouse+'.csv',index = False)
