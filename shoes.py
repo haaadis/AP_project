@@ -6,4 +6,4 @@ items = pd.DataFrame([{'id':1 ,'name': 'sandals', 'unit price':100 , 'stock':10,
         {'id':5 ,'name': 'high hills sandals', 'unit price':850, 'stock':9,'color':{'white','black'}}])
 
 items= items.explode('color')
-items.to_csv('Bags.csv',index=False)
+items.to_csv('Shoes.csv',index=False)
