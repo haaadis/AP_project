@@ -68,7 +68,7 @@ class infooo:
 class Order:
     def __init__(self):
         self.cart_item = pd.DataFrame()
-    def check_quantity(self,id,quantity,color): 
+    def check_quantity(self,items,id,quantity,color): 
             called_item = items.loc[(items['id'] == id) & (items['color'] == color)]
             if (quantity <= called_item['stock']).any():
                 return True
@@ -80,10 +80,10 @@ class Order:
                 df = pd.read_csv(m+'.csv')
                 print(df.to_string(index=False))
                 id = int(input('select the id of what u want:'))
-                quantity = int(input('how many?: '))
                 print(df.loc[df['id']==id,'color'].to_string(index=False))             #print colors to choose from       
                 color = input('which color?: ')
-                if self.check_quantity(id,quantity,color):   #check the quantity using the function       
+                quantity = int(input('how many?: '))
+                if self.check_quantity(df,id,quantity,color):   #check the quantity using the function       
                       called_item = df.loc[(df['id'] == id) & (df['color'] == color),['id','name','color','unit price']]
                       called_item['quantity'] = quantity         #add quantity column
                       called_item['total price'] = called_item['quantity']*called_item['unit price']         #add total price column
@@ -91,6 +91,7 @@ class Order:
                       checkout = input ('checkout?: ').capitalize()     #checkout or continue to order
                       if checkout == 'Yes':
                           self.cart_item.loc['total'] = self.cart_item.loc[:,['quantity','total price']].sum(numeric_only=True)  #add total row
+                          pd.set_option('display.colheader_justify', 'center')
                           print(self.checkout())                          
                           
                           break;
@@ -113,7 +114,7 @@ class Order:
         if confirm(self):
                 #save confirmation as txt file
                 f = open("conf.txt", "w+")
-                f.writelines(["payment status :successful \n",f"name : {c.name} \n",f"card.no:{self.card_no} \n"])
+                f.writelines(["payment status : successful \n",f"name : {c.name} \n",f"card.no : {self.card_no} \n"])
                 f.close() 
                 #save factor as txt file
                 df = pd.read_excel("infofile.xlsx")
@@ -130,6 +131,6 @@ class Order:
         else:
                 #save confirmation as txt file
                 f = open("conf.txt", "w+")
-                f.writelines(["payment status :unsuccessful \n",f"name : {c.name} \n",f"card.no:{self.card_no} \n"])
+                f.writelines(["payment status : unsuccessful \n",f"name : {c.name} \n",f"card.no : {self.card_no} \n"])
                 f.close()   
                 return open("conf.txt","r+").read() 
