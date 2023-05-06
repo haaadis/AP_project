@@ -102,9 +102,11 @@ class Order:
     def checkout(self):
         c = infooo()   #use infooo class to get information
         #enter a port
+        import portal
+        self.card_no=card_no
+        self.order_no=order_no
         
-        self.order_no = random.randint(10**10,10**11)
-        self.card_no = (input('enter your card number: '))   
+          
         def confirm(self):
             if len(self.card_no)==16:
                 return True                                        
@@ -134,3 +136,4 @@ class Order:
                 f.writelines(["payment status : unsuccessful \n",f"name : {c.name} \n",f"card.no : {self.card_no} \n"])
                 f.close()   
                 return open("conf.txt","r+").read() 
+ 
