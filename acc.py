@@ -14,7 +14,7 @@ class Accounting:
           wb.loc[len(wb.index)]=[b,a.loc['total','quantity'],a.loc['total','total price'],(25 if c=='post'else 50),
                                   
                     a.loc['total','total price']*0.09]
-          ws.append(p)
+          
           wb.save('accounting.csv')
     def out(self):
           df = pd.read_excel("accounting.csv")
