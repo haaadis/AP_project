@@ -1,0 +1,8 @@
+import pandas as pd
+items = pd.DataFrame([{'id':1 ,'name': 'melody', 'unit price':100 , 'stock':10,'color':['yellow','pink']},
+        {'id':2 ,'name': 'vonoda', 'unit price':20 , 'stock':5,'color':['green','blue']},
+        {'id':3 ,'name': 'dayana', 'unit price':25 , 'stock':20,'color':['red','blue']},
+        {'id':4 ,'name': 'jelo', 'unit price':90 , 'stock':15,'color':['red','blue']},
+        {'id':5 ,'name': 'adina', 'unit price':50 , 'stock':4,'color':['brown','blue']}])
+items= items.explode('color')
+items.to_csv('Bags.csv',index=False)
