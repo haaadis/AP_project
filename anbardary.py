@@ -1,3 +1,4 @@
+import pandas as pd
 class Inventory:
     #def update_admin_manual(self):
     # if mojodo --> manual 
@@ -22,11 +23,10 @@ class Inventory:
        while True:
             warehouse = input('bags or shoes: ').capitalize() #choose
             df = pd.read_csv(warehouse+'.csv')
-
             file=input(('enter the csv file path: '))
             file=pd.read_csv(file)
-            df.set_index('id', inplace=True)
-            df.update(file.set_index('id'))
+            df.set_index(['id','color'], inplace=True)
+            df.update(file.set_index(['id','color']))
             df.reset_index()
             t=input('do you wanna continue: ')
             if t=='yes':
@@ -56,8 +56,9 @@ class Inventory:
                     df.to_csv(warehouse+'.csv',index=False)
                     break
     def update(self,warehouse,id,quantity,color):
-        wh = warehouse.items
+        wh = pd.read_csv(warehouse+'.csv')
         res = wh.loc[(wh['id'] == id) & (wh['color'] == color), 'stock'].iloc[0]
-        wh.loc[(wh['id'] == id) & (wh['color'] == color), 'stock'] = res-quantity
-        warehouse = warehouse.replace(0, 'unavailable')
+        wh.loc[(wh['id'] == id) & (wh['color'] == color), 'stock'] = int(res)-quantity
+        x=wh['stock'].replace(0, 'unavailable')
+        wh.update(x)
         wh.to_csv(warehouse+'.csv',index = False)
